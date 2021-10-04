@@ -1,4 +1,6 @@
-alias ll="ls -al"
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 
 mkcd() { mkdir -p -- "$1" && cd -P -- "$1"; }
 # alias ..="cd .."
