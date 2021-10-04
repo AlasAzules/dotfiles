@@ -11,10 +11,10 @@ autoload -Uz compinit && compinit
 zplug "themes/lukerandall", from:oh-my-zsh
 # zplug 'dracula/zsh', as:theme
 
-zplug "zdharma/fast-syntax-highlighting"
+zplug "zdharma/fast-syntax-highlighting", defer:2
 zplug "plugins/history-substring-search", from:oh-my-zsh
 zplug "zsh-users/zsh-autosuggestions"
-zplug "b4b4r07/enhancd"
+zplug "b4b4r07/enhancd", use:init.sh
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/docker", from:oh-my-zsh
 
