@@ -1,61 +1,83 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
+set nocompatible
+set enc=utf8
+" Line numbers on
+set nu
 syntax on
 set background=dark
-set enc=utf8
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" os x backspace fix
+set backspace=indent,eol,start
+set modelines=0 " dont need modelines and the potential security hazard
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+"set t_kb
+fixdel
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-Plugin 'git://git.wincent.com/command-t.git'
-Plugin 'preservim/nerdtree'
-" git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-"
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
+" Setup term color support
+if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal"
+    set t_Co=256
+endif
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+" show trailing whitespace chars
+" set list
+" set listchars=tab:>-,trail:.,extends:#,nbsp:.
 
-" YAML indentation
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+" Better buffer management - hide buffers instead of closing them
+" set hidden
 
-" Toggle NERDTree
-nnoremap <C-t> :NERDTreeToggle<CR>
-" Exit Vim when NERDTree is the last window
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+set history=100 " Default history is only 20
+set undolevels=100  " Use more levels of undo
 
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+" tab -> spaces
+set expandtab
+set tabstop=4 " a tab is 4 spaces
+set softtabstop=4 " tab size when insterting/pasting
+set shiftwidth=4 " number of spaces to use for autoindenting
+set shiftround " use multiple of shiftwidth when indenting with '<' and '>'
+set smarttab " insert tabs on the start of a line according to shiftwidth, not tabstop
 
-" Highlight search words
-set hlsearch
+" always set autoindenting on
+set autoindent
+" copy the previous indentation on autoindenting
+set copyindent
+
+" Enable filetype detection
+filetype on
+" Enable filetype-specific indenting
+filetype indent on
+" Enable filetype-specific plugins
+filetype plugin on
+
+" Ruler on
+set ruler
+
+" status line
+set laststatus=2
+
+" better backup, swap and undos storage
+set directory=~/.vim/dirs/tmp     " directory to place swap files in
+set backup                        " make backup files
+set backupdir=~/.vim/dirs/backups " where to put backup files
+set undofile                      " persistent undos - undo after you re-open the file
+set undodir=~/.vim/dirs/undos
+set viminfo+=n~/.vim/dirs/viminfo
+" create needed directories if they don't exist
+if !isdirectory(&backupdir)
+    call mkdir(&backupdir, "p")
+endif
+if !isdirectory(&directory)
+    call mkdir(&directory, "p")
+endif
+if !isdirectory(&undodir)
+    call mkdir(&undodir, "p")
+endif
+
+" Plugin manager
+if filereadable(expand("~/.vim_custom/vim-plug.vim"))
+    execute 'source' expand("~/.vim_custom/vim-plug.vim")
+elseif filereadable(expand("~/.vim_custom/vundle.vim"))
+    execute 'source' expand("~/.vim_custom/vundle.vim")
+else
+    echom "No plugin manager is being used."
+endif
+
+map <F2> :NERDTreeToggle<CR>
